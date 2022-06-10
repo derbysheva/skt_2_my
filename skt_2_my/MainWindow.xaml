@@ -222,6 +222,36 @@
         <GroupBox Header="Обратная задача" 
                   Grid.Column="1" 
                   Grid.Row="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.07*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                </Grid.ColumnDefinitions>
+                    <Button Name="openB"
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Content="Задать B"
+                            Click="Open"/>
+                    <Button Name="loadDirectSolution"
+                                Grid.Column="2"
+                                Grid.Row="1"
+                                Content="Решить обратную задачу"
+                                Click=""/>
+                    <Button Name="DrawInverseSolution"
+                                    Grid.Column="4"
+                                    Grid.Row="1"
+                                    Content="Draw P"
+                                    Click=""/>
+            </Grid>
+           
         </GroupBox>
         <Canvas 
             Grid.Column="0" 
