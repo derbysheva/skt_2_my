@@ -1,0 +1,232 @@
+﻿<Window x:Class="skt_2_my.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:skt_2_my"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="900">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.55*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.8*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Задать расчетную область" 
+                  Grid.Column="1" 
+                  Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.15*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.15*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       Content="Xmin"/>
+                <Label Grid.Row="2"
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       Content="Ymin"/>
+                <Label Grid.Row="4"
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       Content="Zmin"/>
+                <Label Grid.Row="0"
+                       Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       Content="Xmax"/>
+                <Label Grid.Row="2"
+                       Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       Content="Ymax"/>
+                <Label Grid.Row="4"
+                       Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       Content="Zmax"/>
+                <Label Grid.Row="0"
+                       Grid.Column="4"
+                       HorizontalAlignment="Center"
+                       Content="Nx"/>
+                <Label Grid.Row="2"
+                       Grid.Column="4"
+                       HorizontalAlignment="Center"
+                       Content="Ny"/>
+                <Label Grid.Row="4"
+                       Grid.Column="4"
+                       HorizontalAlignment="Center"
+                       Content="Nz"/>
+                <TextBox Grid.Row="0" 
+                         Grid.Column="1" 
+                         Name="xMin"/>
+                <TextBox Grid.Row="2" 
+                         Grid.Column="1" 
+                         Name="yMin"/>
+                <TextBox Grid.Row="4" 
+                         Grid.Column="1" 
+                         Name="zMin"/>
+                <TextBox Grid.Row="0" 
+                         Grid.Column="3" 
+                         Name="xMax"/>
+                <TextBox Grid.Row="2" 
+                         Grid.Column="3" 
+                         Name="yMax"/>
+                <TextBox Grid.Row="4" 
+                         Grid.Column="3" 
+                         Name="zMax"/>
+                <TextBox Grid.Row="0" 
+                         Grid.Column="5" 
+                         Name="nX"/>
+                <TextBox Grid.Row="2" 
+                         Grid.Column="5" 
+                         Name="nY"/>
+                <TextBox Grid.Row="4" 
+                         Grid.Column="5" 
+                         Name="nZ"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="Прямая задача" 
+                  Grid.Column="1" 
+                  Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.4*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.2*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <GroupBox Header="Задать область с аномалией"
+                          Grid.Column="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.4*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               Content="N"/>
+                        <TextBox Grid.Row="0" 
+                               Grid.Column="2" 
+                               Name="nAnom"/>
+                        <Button Content="Задать N аномалий"
+                                HorizontalAlignment="Center"
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                Click="Button_Click"/>
+                    </Grid>
+                </GroupBox>
+                
+                <GroupBox Header="Задать приемники"
+                          Grid.Row="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.15*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.15*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.8*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.8*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.9*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               Content="XminRec"/>
+                        <Label Grid.Row="2"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               Content="YminRec"/>
+                        <Label Grid.Row="4"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               Content="ZRec"/>
+                        <Label Grid.Row="0"
+                               Grid.Column="2"
+                               HorizontalAlignment="Center"
+                               Content="XmaxRec"/>
+                        <Label Grid.Row="2"
+                               Grid.Column="2"
+                               HorizontalAlignment="Center"
+                               Content="YmaxRec"/>
+                        <Label Grid.Row="0"
+                               Grid.Column="4"
+                               HorizontalAlignment="Center"
+                               Content="NProfiles"/>
+                        <Label Grid.Row="2"
+                               Grid.Column="4"
+                               HorizontalAlignment="Center"
+                               Content="NReceiver"/>
+                        <TextBox Grid.Row="0" 
+                                 Grid.Column="1" 
+                                 Name="xRecMin"/>
+                        <TextBox Grid.Row="2" 
+                                 Grid.Column="1" 
+                                 Name="yRecMin"/>
+                        <TextBox Grid.Row="4" 
+                                 Grid.Column="1" 
+                                 Name="zRec"/>
+                        <TextBox Grid.Row="0" 
+                                 Grid.Column="3" 
+                                 Name="xRecMax"/>
+                        <TextBox Grid.Row="2" 
+                                 Grid.Column="3" 
+                                 Name="yRecMax"/>
+                        <TextBox Grid.Row="0" 
+                                 Grid.Column="5" 
+                                 Name="nPr"/>
+                        <TextBox Grid.Row="2" 
+                                 Grid.Column="5" 
+                                 Name="nRec"/>
+                    </Grid>
+                </GroupBox>
+
+                <Button Content="Решить прямую задачу"
+                        Grid.Row="2"
+                        HorizontalAlignment="Center"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Обратная задача" 
+                  Grid.Column="1" 
+                  Grid.Row="3">
+        </GroupBox>
+        <Canvas 
+            Grid.Column="0" 
+            Grid.Row="0" 
+            Grid.RowSpan="3" 
+            Background="White"/>
+    </Grid>
+</Window>
