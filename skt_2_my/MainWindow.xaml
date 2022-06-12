@@ -8,16 +8,16 @@
         Title="MainWindow" Height="550" Width="900">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.55*"/>
+            <RowDefinition Height="0.27*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.15*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.8*"/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="Задать расчетную область" 
-                  Grid.Column="1" 
+                  Grid.Column="0" 
                   Grid.Row="0">
             <Grid>
                 <Grid.RowDefinitions>
@@ -72,77 +72,91 @@
                        HorizontalAlignment="Center"
                        Content="Nz"/>
                 <TextBox Grid.Row="0" 
-                         Grid.Column="1" 
-                         Name="xMin"/>
+                         Name="xMin" 
+                         Grid.ColumnSpan="3"
+                         Grid.RowSpan="2" 
+                         TextChanged="xMin_TextChanged"/>
                 <TextBox Grid.Row="2" 
                          Grid.Column="1" 
-                         Name="yMin"/>
+                         Name="yMin"
+                         TextChanged="yMin_TextChanged"/>
                 <TextBox Grid.Row="4" 
                          Grid.Column="1" 
-                         Name="zMin"/>
+                         Name="zMin"
+                         TextChanged="zMin_TextChanged"/>
                 <TextBox Grid.Row="0" 
                          Grid.Column="3" 
-                         Name="xMax"/>
+                         Name="xMax"
+                         TextChanged="xMax_TextChanged"/>
                 <TextBox Grid.Row="2" 
                          Grid.Column="3" 
-                         Name="yMax"/>
+                         Name="yMax"
+                        TextChanged="yMax_TextChanged"/>
                 <TextBox Grid.Row="4" 
                          Grid.Column="3" 
-                         Name="zMax"/>
+                         Name="zMax"
+                         TextChanged="zMax_TextChanged"/>
                 <TextBox Grid.Row="0" 
                          Grid.Column="5" 
-                         Name="nX"/>
+                         Name="nX"
+                         TextChanged="nX_TextChanged"/>
                 <TextBox Grid.Row="2" 
                          Grid.Column="5" 
-                         Name="nY"/>
+                         Name="nY"
+                         TextChanged="nY_TextChanged"/>
                 <TextBox Grid.Row="4" 
                          Grid.Column="5" 
-                         Name="nZ"/>
+                         Name="nZ"
+                         TextChanged="nZ_TextChanged"/>
             </Grid>
         </GroupBox>
-        
+
         <GroupBox Header="Прямая задача" 
                   Grid.Column="1" 
-                  Grid.Row="1">
+                  Grid.Row="0"
+                  Grid.RowSpan="3">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.4*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.08*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <GroupBox Header="Задать область с аномалией"
                           Grid.Column="0">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="0.4*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.02*"/>
+                            <RowDefinition Height="0.08*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.2*"/>
                             <ColumnDefinition Width="0.1*"/>
                             <ColumnDefinition Width="0.6*"/>
-                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.6*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
-                        <Label Grid.Row="0"
-                               Grid.Column="0"
-                               HorizontalAlignment="Center"
-                               Content="N"/>
-                        <TextBox Grid.Row="0" 
-                               Grid.Column="2" 
-                               Name="nAnom"/>
-                        <Button Content="Задать N аномалий"
-                                HorizontalAlignment="Center"
-                                Grid.Row="0"
-                                Grid.Column="4"
-                                Click="Button_Click"/>
+                        <RichTextBox x:Name="SetAnoms"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="5"
+                        Grid.Row="0" TextChanged="SetAnoms_TextChanged"/>
+                        <Button 
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            Content="Сохранить" 
+                            Click="Save_Click" />
+                        <Button 
+                        Grid.Column="3"
+                        Grid.Row="2"
+                        Content="Загрузить"  
+                        Click="Load_Click" />
                     </Grid>
                 </GroupBox>
-                
+
                 <GroupBox Header="Задать приемники"
                           Grid.Row="1">
                     <Grid>
@@ -191,25 +205,32 @@
                                Content="NReceiver"/>
                         <TextBox Grid.Row="0" 
                                  Grid.Column="1" 
-                                 Name="xRecMin"/>
+                                 Name="xRecMin"
+                                 TextChanged="xRecMin_TextChanged"/>
                         <TextBox Grid.Row="2" 
                                  Grid.Column="1" 
-                                 Name="yRecMin"/>
+                                 Name="yRecMin"
+                                 TextChanged="yRecMin_TextChanged"/>
                         <TextBox Grid.Row="4" 
                                  Grid.Column="1" 
-                                 Name="zRec"/>
+                                 Name="zRec"
+                                 TextChanged="zRec_TextChanged"/>
                         <TextBox Grid.Row="0" 
                                  Grid.Column="3" 
-                                 Name="xRecMax"/>
+                                 Name="xRecMax"
+                                 TextChanged="xRecMax_TextChanged"/>
                         <TextBox Grid.Row="2" 
                                  Grid.Column="3" 
-                                 Name="yRecMax"/>
+                                 Name="yRecMax"
+                                 TextChanged="yRecMax_TextChanged"/>
                         <TextBox Grid.Row="0" 
                                  Grid.Column="5" 
-                                 Name="nPr"/>
+                                 Name="nPr"
+                                 TextChanged="nPr_TextChanged"/>
                         <TextBox Grid.Row="2" 
                                  Grid.Column="5" 
-                                 Name="nRec"/>
+                                 Name="nRec"
+                                 TextChanged="nRec_TextChanged"/>
                     </Grid>
                 </GroupBox>
 
@@ -220,11 +241,10 @@
         </GroupBox>
 
         <GroupBox Header="Обратная задача" 
-                  Grid.Column="1" 
+                  Grid.Column="0" 
                   Grid.Row="3">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.07*"/>
                     <RowDefinition Height="0.2*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -235,28 +255,29 @@
                     <ColumnDefinition Width="0.1*"/>
                     <ColumnDefinition Width="0.6*"/>
                 </Grid.ColumnDefinitions>
-                    <Button Name="openB"
+                <Button Name="openB"
                             Grid.Column="0"
                             Grid.Row="1"
                             Content="Задать B"
                             Click="Open"/>
-                    <Button Name="loadDirectSolution"
+                <Button Name="loadDirectSolution"
                                 Grid.Column="2"
                                 Grid.Row="1"
                                 Content="Решить обратную задачу"
                                 Click=""/>
-                    <Button Name="DrawInverseSolution"
+                <Button Name="DrawInverseSolution"
                                     Grid.Column="4"
                                     Grid.Row="1"
                                     Content="Draw P"
                                     Click=""/>
+
             </Grid>
-           
+
         </GroupBox>
         <Canvas 
             Grid.Column="0" 
-            Grid.Row="0" 
-            Grid.RowSpan="3" 
+            Grid.Row="1" 
+            Grid.RowSpan="1" 
             Background="White"/>
     </Grid>
 </Window>
