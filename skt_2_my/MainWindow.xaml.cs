@@ -36,7 +36,10 @@ namespace skt_2_my
         double xrecmin, xrecmax, yrecmin, yrecmax, zrec;
         int npr, nrec;
         ObservableCollection<Data3> B, P;
-
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
         private void xMin_TextChanged(object sender, TextChangedEventArgs e) => xmin = Convert.ToDouble(xMin.Text);
         private void yMin_TextChanged(object sender, TextChangedEventArgs e) => ymin = Convert.ToDouble(yMin.Text);
 
@@ -68,15 +71,32 @@ namespace skt_2_my
 
         List<ObservableCollection<Data3>> _cellMesh = new List<ObservableCollection<Data3>>();
 
-        public MainWindow()
+        private void SolveDirect_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            System.IO.FileInfo fi = new System.IO.FileInfo(@"C:\Users\derby\source\repos\skt_2_my\C++\skt_1_my_new.exe");
+            if (fi.Exists)
+            {
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = @"C:\Users\derby\source\repos\skt_2_my\C++\skt_1_my_new.exe";
+                p.Start();
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveArea_Click(object sender, RoutedEventArgs e)
         {
-            Window1 taskWindow = new Window1();
-            taskWindow.Show();
+            StreamWriter writer = new StreamWriter("area.txt");
+            writer.WriteLine($"{xmin} {xmax} {nx}");
+            writer.WriteLine($"{ymin} {ymax} {ny}");
+            writer.WriteLine($"{zmin} {zmax} {nz}");
+            writer.Close();
+        }
+        private void SaveReceivers_Click(object sender, RoutedEventArgs e)
+        {
+            StreamWriter writer = new StreamWriter("receivers_n_min_max.txt");
+            writer.WriteLine($"{npr} {nrec}");
+            writer.WriteLine($"{xrecmin} {xrecmax}");
+            writer.WriteLine($"{yrecmin} {yrecmax}");
+            writer.WriteLine($"{zrec}");
         }
 
         private void Open(object sender, RoutedEventArgs e)
@@ -163,5 +183,4 @@ namespace skt_2_my
             }
         }
     }
-}
 }
