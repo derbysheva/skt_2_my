@@ -88,14 +88,74 @@ namespace skt_2_my
             chart.Children.Add(pth);
         }
 
-        public void DrawAll(List<ObservableCollection<Data3>> genData, double xMin, double zMin, double xMax, double zMax)
+        private int CheckInterval( Data3 val, ObservableCollection<Data3> values)
         {
+            if (val.xComp >= values[0].xComp && val.xComp < values[1].xComp) return 0;
+            else
+            if (val.xComp >= values[1].xComp && val.xComp < values[2].xComp) return 1;
+            else
+            if (val.xComp >= values[2].xComp && val.xComp < values[3].xComp) return 2;
+            else
+            if (val.xComp >= values[3].xComp && val.xComp < values[4].xComp) return 3;
+            else
+            if (val.xComp >= values[4].xComp && val.xComp < values[5].xComp) return 4;
+            else
+            if (val.xComp >= values[5].xComp && val.xComp < values[6].xComp) return 5;
+            else
+            if (val.xComp >= values[6].xComp && val.xComp < values[7].xComp) return 6;
+            else
+            if (val.xComp >= values[7].xComp && val.xComp < values[8].xComp) return 7;
+            else
+            if (val.xComp >= values[8].xComp && val.xComp < values[9].xComp) return 8;
+            else
+            if (val.xComp >= values[9].xComp && val.xComp < values[10].xComp) return 9;
+            else
+            if (val.xComp >= values[10].xComp && val.xComp < values[11].xComp) return 10;
+            else
+            if (val.xComp >= values[11].xComp && val.xComp < values[12].xComp) return 11;
+            else
+            if (val.xComp >= values[12].xComp && val.xComp < values[13].xComp) return 12;
+            else
+            if (val.xComp >= values[13].xComp && val.xComp < values[14].xComp) return 13;
+            else
+            if (val.xComp >= values[14].xComp && val.xComp <= values[15].xComp) return 14;
+        }
 
-
+        public void DrawAll(List<ObservableCollection<Data3>> meshData, ObservableCollection<Data3> Pdata, 
+            double xMin, double zMin, double xMax, double zMax, Canvas chart)
+        {
             int nX = Convert.ToInt32(xMax - xMin);
             int nZ = Convert.ToInt32(zMax - zMin);
+            int xMin1 = Convert.ToInt32(xMin);
+            int zMin1 = Convert.ToInt32(xMin);
+
+            double maxP = Pdata.Max(a => a.xComp);
+            double minP = Pdata.Min(a => a.xComp);
+            double dP = maxP - minP;
+            double hP = dP / 15;
+            ObservableCollection<Color> cols = new ObservableCollection<Color>();
+            for(int i=0; i<15; i++)
+            {
+                byte r = Convert.ToByte(255 - i * 17);
+                byte g = Convert.ToByte(255 - i * 17);
+                cols.Add(Color.FromRgb(r, g, 255));
+            }
+            ObservableCollection<Data3> values = new ObservableCollection<Data3>();
+            for (int i = 0; i < 15; i++)
+            {
+                var tmp = i * hP;
+                values.Add(new Data3(){
+                    xComp = minP + tmp,  
+                    yComp = 0, 
+                    zComp = 0});
+            }
+            for(int i = 0; i< meshData.LongCount(); i++)
+            {
+                var indcol = CheckInterval(Pdata[i], values);
+                DrawRec(meshData[i], chart, xMin1, zMin1, nX, nZ, cols[indcol]);
+            }
         }
-        public void DrawPoint(ObservableCollection<Data> data, Canvas chart)
+        /*public void DrawPoint(ObservableCollection<Data> data, Canvas chart)
         {
             chart.Children.Clear();
 
@@ -228,6 +288,7 @@ namespace skt_2_my
                 tmpY -= hY;
             }
         }
+        */
     }
     public partial class MainWindow : Window
     {
@@ -308,7 +369,7 @@ namespace skt_2_my
                     });
                 }
                 reader.Close();
-                _cellMesh.Add(source);
+                P = source;
             }
         }
 
