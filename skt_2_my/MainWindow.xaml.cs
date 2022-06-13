@@ -42,13 +42,13 @@ namespace skt_2_my
             Width = 496; Height = 350;
         }
 
-        protected Point TrasformMetresToPixels(Data3 tmp, int minX, int maxX, int minY, int maxY)
+        protected Point TrasformMetresToPixels(Data3 tmp, int minX, int minY, int nX, int nY)
         {
             //int h = Height - 60;
             Point newtmp = new Point();
 
-            newtmp.X = coorX + Convert.ToInt32((tmp.xComp - minX) * Width/(maxX-minX));
-            newtmp.Y = coorY + Height - Convert.ToInt32((tmp.yComp - minY) * Height / (maxY - minY));
+            newtmp.X = coorX + Convert.ToInt32((tmp.xComp - minX) * Width / nX);
+            newtmp.Y = coorY + Height - Convert.ToInt32((tmp.yComp - minY) * Height / nY);
 
             return newtmp;
         }
@@ -63,10 +63,37 @@ namespace skt_2_my
         //    return newtmp;
         //}
 
-        public void DrawRec (ObservableCollection<Data3> data, Canvas chart)
+        public void DrawRec (ObservableCollection<Data3> data, Canvas chart, int xMin, int zMin, int nX, int nZ, Color col)
         {
             chart.Children.Clear();
 
+            System.Windows.Shapes.Path pth = new System.Windows.Shapes.Path();
+            pth.Stroke = new SolidColorBrush(col);
+            pth.StrokeThickness = 1;
+            StreamGeometry geo = new StreamGeometry();
+            geo.FillRule = FillRule.EvenOdd;
+            using (StreamGeometryContext ctx = geo.Open())
+            {
+                Point p1 = TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ);
+                Point p2 = TrasformMetresToPixels(data[1], xMin, zMin, nX, nZ);
+                Point p3 = TrasformMetresToPixels(data[2], xMin, zMin, nX, nZ);
+                Point p4 = TrasformMetresToPixels(data[3], xMin, zMin, nX, nZ);
+                ctx.BeginFigure(p1, true, false);
+                ctx.LineTo(p2, true, false);
+                ctx.LineTo(p3, true, false);
+                ctx.LineTo(p4, true, false);
+            }
+            geo.Freeze();
+            pth.Data = geo;
+            chart.Children.Add(pth);
+        }
+
+        public void DrawAll(List<ObservableCollection<Data3>> genData, double xMin, double zMin, double xMax, double zMax)
+        {
+
+
+            int nX = Convert.ToInt32(xMax - xMin);
+            int nZ = Convert.ToInt32(zMax - zMin);
         }
         public void DrawPoint(ObservableCollection<Data> data, Canvas chart)
         {
