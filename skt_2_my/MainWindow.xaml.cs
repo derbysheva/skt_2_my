@@ -98,6 +98,18 @@ namespace skt_2_my
             Canvas.SetTop(rect, TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ).Y);
             chart.Children.Add(rect);
         }
+        public void DrawRec1(Canvas chart, double Width, double Height, double left, double top, Color col)
+        {
+            Rectangle rect;
+            rect = new Rectangle();
+            rect.Stroke = new SolidColorBrush(col);
+            rect.Fill = new SolidColorBrush(col);
+            rect.Width = Width;
+            rect.Height = Height;
+            Canvas.SetLeft(rect, left);
+            Canvas.SetTop(rect, top);
+            chart.Children.Add(rect);
+        }
 
         private int CheckInterval( Data3 val, ObservableCollection<Data3> values)
         {
@@ -128,13 +140,13 @@ namespace skt_2_my
             if (val.xComp >= values[12].xComp && val.xComp < values[13].xComp) return 12;
             else
             if (val.xComp >= values[13].xComp && val.xComp < values[14].xComp) return 13;
-            else
-            if (val.xComp >= values[14].xComp && val.xComp <= values[15].xComp) return 14;
-            else return 14;
+            //else
+            //if (val.xComp >= values[14].xComp && val.xComp <= values[15].xComp) return 14;
+            else return 13;
         }
 
-        public void DrawAll(List<ObservableCollection<Data3>> meshData, ObservableCollection<Data3> Pdata, 
-            double xMin, double zMin, double xMax, double zMax, Canvas chart)
+        public void DrawAll(List<ObservableCollection<Data3>> meshData, ObservableCollection<Data3> Pdata,
+            double xMin, double zMin, double xMax, double zMax, int numX, int numZ, Canvas chart)
         {
             int nX = Convert.ToInt32(xMax - xMin);
             int nZ = Convert.ToInt32(zMax - zMin);
@@ -146,166 +158,86 @@ namespace skt_2_my
             double dP = maxP - minP;
             double hP = dP / 15;
             ObservableCollection<Color> cols = new ObservableCollection<Color>();
-            for(int i=0; i<15; i++)
+            for (int i = 1; i < 15; i++)
             {
                 byte r = Convert.ToByte(255 - i * 17);
                 byte g = Convert.ToByte(255 - i * 17);
                 cols.Add(Color.FromRgb(r, g, 255));
             }
             ObservableCollection<Data3> values = new ObservableCollection<Data3>();
-            for (int i = 0; i <= 15; i++)
+            for (int i = 0; i <15; i++)
             {
                 var tmp = i * hP;
-                values.Add(new Data3(){
-                    xComp = minP + tmp,  
-                    yComp = 0, 
-                    zComp = 0});
+                values.Add(new Data3()
+                {
+                    xComp = minP + tmp,
+                    yComp = 0,
+                    zComp = 0
+                });
             }
             chart.Children.Clear();
-            for (int i = 0; i< meshData.LongCount(); i++)
-            { 
+            for (int i = 0; i < meshData.LongCount(); i++)
+            {
                 var indcol = CheckInterval(Pdata[i], values);
                 DrawRec(meshData[i], chart, xMin1, zMin1, nX, nZ, cols[indcol]);
             }
-        }
-        /*public void DrawPoint(ObservableCollection<Data> data, Canvas chart)
-        {
-            chart.Children.Clear();
-
-            int minX = data.Min(a => a.X) - 1;
-            int maxX = data.Max(a => a.X) + 1;
-            int minY = data.Min(a => a.Y);
-            int maxY = data.Max(a => a.Y);
-
-            maxY = Convert.ToInt32(maxY + maxY * 0.2);
-
-            int nX = maxX - minX;
-            int nY = maxY - minY;
-
-            double kX = Convert.ToDouble(Height - 10) / nX;
-            double kY = Convert.ToDouble(Height - 60) / nY;
-
-            //возьмем дату и порисуем линию
-            System.Windows.Shapes.Path pth = new System.Windows.Shapes.Path();
-            pth.Stroke = Brushes.Blue;
-            pth.StrokeThickness = 1;
-            StreamGeometry geo = new StreamGeometry();
-            geo.FillRule = FillRule.EvenOdd;
-            using (StreamGeometryContext ctx = geo.Open())
-            {
-                for (int i = 0; i < data.Count - 1; i++)
-                {
-                    Point a = TrasformMetresToPixels(data[i], kX + scaleX, kY + scaleY, minX, minY);
-                    Point b = TrasformMetresToPixels(data[i + 1], kX + scaleX, kY + scaleY, minX, minY);
-                    Point[] pointes = { a, b };
-
-                    ctx.BeginFigure(a, true, false);
-                    ctx.LineTo(b, true, false);
-                }
-            }
-            geo.Freeze();
-            pth.Data = geo;
-            chart.Children.Add(pth);
-
-            Rectangle rect1;
-            rect1 = new Rectangle();
-            rect1.Stroke = Brushes.White;
-            rect1.Fill = Brushes.White;
-            rect1.Width = 40;
-            rect1.Height = Height;
-            Canvas.SetLeft(rect1, 0);
-            Canvas.SetTop(rect1, 0);
-            chart.Children.Add(rect1);
-
-            Rectangle rect2;
-            rect2 = new Rectangle();
-            rect2.Stroke = Brushes.White;
-            rect2.Fill = Brushes.White;
-            rect2.Width = Width;
-            rect2.Height = Height;
-            Canvas.SetLeft(rect2, 0);
-            Canvas.SetTop(rect2, Height - 30);
-            chart.Children.Add(rect2);
-
-            Rectangle rect3;
-            rect3 = new Rectangle();
-            rect3.Stroke = Brushes.White;
-            rect3.Fill = Brushes.White;
-            rect3.Width = Width;
-            rect3.Height = 30;
-            Canvas.SetLeft(rect3, 0);
-            Canvas.SetTop(rect3, 0);
-            chart.Children.Add(rect3);
-
-            Rectangle rect4;
-            rect4 = new Rectangle();
-            rect4.Stroke = Brushes.White;
-            rect4.Fill = Brushes.White;
-            rect4.Width = Width;
-            rect4.Height = Height;
-            Canvas.SetLeft(rect4, Height + 30);
-            Canvas.SetTop(rect4, 0);
-            chart.Children.Add(rect4);
-
             //нарисуем разбиения по осям
-            int hX = Convert.ToInt32((Height - 10) / 4);
-            int hY = Convert.ToInt32((Height - 60) / 4);
-            int tmpX = 40, tmpY = Height - 30;
+            int hX = Convert.ToInt32((Width) / numX);
+            int hY = Convert.ToInt32((Height) / numZ);
+            int tmpX = 0, tmpY = Height-10;
+
+            List<double> xcoords = new List<double>();
+            List<double> zcoords = new List<double>();
+            double stepX = (xMax - xMin) / numX;
+            double stepZ = (zMax - zMin) / numZ;
+            for (int i = 0; i < numX; i++)
+                xcoords.Add(xMin + i * stepX);
+            xcoords.Add(xMax);
+            for (int i = 0; i < numZ; i++)
+                zcoords.Add(zMin + i * stepZ);
+            zcoords.Add(zMax);
 
             //по х
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i <= numX; i++)
             {
-                System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
-                path.Stroke = Brushes.Black;
-                path.StrokeThickness = 1;
-                StreamGeometry geom = new StreamGeometry();
-                geom.FillRule = FillRule.EvenOdd;
-                using (StreamGeometryContext ctx = geom.Open())
-                {
-                    ctx.BeginFigure(new Point(tmpX, Height - 30), true, false);
-                    ctx.LineTo(new Point(tmpX, 30), true, false);
-                }
-                geom.Freeze();
-                path.Data = geom;
-                chart.Children.Add(path);
-                List<double> beg = TrasformPixelsToMetres(new Point(tmpX, 0), kX + scaleX, kY + scaleY, minX, minY);
                 TextBlock textBlock = new TextBlock();
-                textBlock.Text = beg[0].ToString("0.#");
+                textBlock.Text = xcoords[i].ToString("0.#");
                 Canvas.SetLeft(textBlock, tmpX - 5);
-                Canvas.SetTop(textBlock, Height - 25);
+                Canvas.SetTop(textBlock, -20);
                 chart.Children.Add(textBlock);
                 tmpX += hX;
             }
-            //по y
-            for (int i = 0; i < 5; i++)
+            //по z
+            for (int i = 0; i <= numZ; i++)
             {
-                System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
-                path.Stroke = Brushes.Black;
-                path.StrokeThickness = 1;
-                StreamGeometry geom = new StreamGeometry();
-                geom.FillRule = FillRule.EvenOdd;
-                using (StreamGeometryContext ctx = geom.Open())
-                {
-                    ctx.BeginFigure(new Point(40, tmpY), true, false);
-                    ctx.LineTo(new Point(Height + 30, tmpY), true, false);
-                }
-                geom.Freeze();
-                path.Data = geom;
-                chart.Children.Add(path);
-                List<double> beg = TrasformPixelsToMetres(new Point(0, tmpY), kX + scaleX, kY + scaleY, minX, minY);
                 TextBlock textBlock = new TextBlock();
-                textBlock.Text = beg[1].ToString("0.#");
-                Canvas.SetLeft(textBlock, 13);
-                Canvas.SetTop(textBlock, tmpY - 8);
+                textBlock.Text = zcoords[i].ToString("0.#");
+                Canvas.SetRight(textBlock, Width+20);
+                Canvas.SetTop(textBlock, tmpY);
                 chart.Children.Add(textBlock);
                 tmpY -= hY;
             }
+
+            //нарисуем шкалу
+            double hscal = (Height+50)/15;
+            for(int i=0; i<14; i++)
+            {
+                TextBlock textBlock = new TextBlock();
+                textBlock.Text = values[i].xComp.ToString("e3");
+                textBlock.FontSize = 9;
+                //Canvas.SetLeft(textBlock, i * hscal - 45);
+                //Canvas.SetTop(textBlock, Height+20);
+                Canvas.SetLeft(textBlock, Width+55);
+                Canvas.SetTop(textBlock, i * 14 -15);
+                chart.Children.Add(textBlock);
+                tmpX += hX;
+                DrawRec1(chart, 15, hscal, Width+30, -15 + i * 14, cols[i]);
+            }
+
         }
-        */
     }
     public partial class MainWindow : Window
     {
-        OpenFileDialog openFileDialog;
         double xmin, xmax, ymin, ymax, zmin, zmax;
         int nx, ny, nz;
         Data3 pAnom;
@@ -320,33 +252,6 @@ namespace skt_2_my
         {
             InitializeComponent();
         }
-        private void xMin_TextChanged(object sender, TextChangedEventArgs e) => xmin = Convert.ToDouble(xMin.Text);
-        private void yMin_TextChanged(object sender, TextChangedEventArgs e) => ymin = Convert.ToDouble(yMin.Text);
-
-        private void zMin_TextChanged(object sender, TextChangedEventArgs e) => zmin = Convert.ToDouble(zMin.Text);
-        private void xMax_TextChanged(object sender, TextChangedEventArgs e) => xmax = Convert.ToDouble(xMax.Text);
-
-        private void yMax_TextChanged(object sender, TextChangedEventArgs e) => ymax = Convert.ToDouble(yMax.Text);
-
-        private void zMax_TextChanged(object sender, TextChangedEventArgs e) => zmax = Convert.ToDouble(zMax.Text);
-
-        private void nX_TextChanged(object sender, TextChangedEventArgs e) => nx = Convert.ToInt32(nX.Text);
-
-        private void nY_TextChanged(object sender, TextChangedEventArgs e) => ny = Convert.ToInt32(nY.Text);
-        private void nZ_TextChanged(object sender, TextChangedEventArgs e) => nz = Convert.ToInt32(nZ.Text);
-
-        private void xRecMin_TextChanged(object sender, TextChangedEventArgs e) => xrecmin = Convert.ToDouble(xRecMin.Text);
-
-        private void yRecMin_TextChanged(object sender, TextChangedEventArgs e) => yrecmin = Convert.ToDouble(yRecMin.Text);
-        private void zRec_TextChanged(object sender, TextChangedEventArgs e) => zrec = Convert.ToDouble(zRec.Text);
-        private void xRecMax_TextChanged(object sender, TextChangedEventArgs e) => xrecmax = Convert.ToDouble(xRecMax.Text);
-
-        private void yRecMax_TextChanged(object sender, TextChangedEventArgs e) => yrecmax = Convert.ToDouble(yRecMax.Text);
-
-        private void nPr_TextChanged(object sender, TextChangedEventArgs e) => npr = Convert.ToInt32(nPr.Text);
-
-        private void nRec_TextChanged(object sender, TextChangedEventArgs e) => nrec = Convert.ToInt32(nRec.Text);
-
         private void SolveDirect_Click(object sender, RoutedEventArgs e)
         {
             System.IO.FileInfo fi = new System.IO.FileInfo(@"C:\Users\derby\source\repos\skt_2_my\skt_1_my_new.exe");
@@ -369,10 +274,8 @@ namespace skt_2_my
             {
                     string filename = ofd.FileName;
                     string line;
-                    string shortFileName;
                     StreamReader reader = File.OpenText(filename);
                     ObservableCollection<Data3> source = new ObservableCollection<Data3>();
-                    //shortFileName = filename.Split('\\').Last();
                     while ((line = reader.ReadLine()) != null)
                     {
                         //line.TrimEnd('\t');
@@ -429,7 +332,7 @@ namespace skt_2_my
 
         private void DrawSolution_Click(object sender, RoutedEventArgs e)
         {
-            drawobj.DrawAll(_cellMesh, P, xmin, zmin, xmax, zmax, cvs);
+            drawobj.DrawAll(_cellMesh, P, xmin, zmin, xmax, zmax, nx, nz, cvs);
         }
         private void SaveArea_Click(object sender, RoutedEventArgs e)
         {
@@ -469,7 +372,7 @@ namespace skt_2_my
                 //_cellMesh.Add(source);
             }
         }
-        private void OpenMesh(object sender, RoutedEventArgs e)
+        private void OpenMesh (object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == true)

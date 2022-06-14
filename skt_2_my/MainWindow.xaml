@@ -5,117 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:skt_2_my"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="900">
+        Title="MainWindow" Height="400" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.35*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="0.15*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.8*"/>
+            <ColumnDefinition Width="0.7*"/>
         </Grid.ColumnDefinitions>
-        <Expander Header="Задать расчетную область" 
-                  Grid.Column="0" 
-                  Grid.Row="0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.1*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.1*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.1*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.6*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.6*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0"
-                       Grid.Column="0"
-                       HorizontalAlignment="Center"
-                       Content="Xmin"/>
-                <Label Grid.Row="2"
-                       Grid.Column="0"
-                       HorizontalAlignment="Center"
-                       Content="Ymin"/>
-                <Label Grid.Row="4"
-                       Grid.Column="0"
-                       HorizontalAlignment="Center"
-                       Content="Zmin"/>
-                <Label Grid.Row="0"
-                       Grid.Column="2"
-                       HorizontalAlignment="Center"
-                       Content="Xmax"/>
-                <Label Grid.Row="2"
-                       Grid.Column="2"
-                       HorizontalAlignment="Center"
-                       Content="Ymax"/>
-                <Label Grid.Row="4"
-                       Grid.Column="2"
-                       HorizontalAlignment="Center"
-                       Content="Zmax"/>
-                <Label Grid.Row="0"
-                       Grid.Column="4"
-                       HorizontalAlignment="Center"
-                       Content="Nx"/>
-                <Label Grid.Row="2"
-                       Grid.Column="4"
-                       HorizontalAlignment="Center"
-                       Content="Ny"/>
-                <Label Grid.Row="4"
-                       Grid.Column="4"
-                       HorizontalAlignment="Center"
-                       Content="Nz"/>
-                <TextBox Grid.Row="0" 
-                         Name="xMin" 
-                         Grid.Column="1"
-                         TextChanged="xMin_TextChanged"/>
-                <TextBox Grid.Row="2" 
-                         Grid.Column="1" 
-                         Name="yMin"
-                         TextChanged="yMin_TextChanged"/>
-                <TextBox Grid.Row="4" 
-                         Grid.Column="1" 
-                         Name="zMin"
-                         TextChanged="zMin_TextChanged"/>
-                <TextBox Grid.Row="0" 
-                         Grid.Column="3" 
-                         Name="xMax"
-                         TextChanged="xMax_TextChanged"/>
-                <TextBox Grid.Row="2" 
-                         Grid.Column="3" 
-                         Name="yMax"
-                        TextChanged="yMax_TextChanged"/>
-                <TextBox Grid.Row="4" 
-                         Grid.Column="3" 
-                         Name="zMax"
-                         TextChanged="zMax_TextChanged"/>
-                <TextBox Grid.Row="0" 
-                         Grid.Column="5" 
-                         Name="nX"
-                         TextChanged="nX_TextChanged"/>
-                <TextBox Grid.Row="2" 
-                         Grid.Column="5" 
-                         Name="nY"
-                         TextChanged="nY_TextChanged"/>
-                <TextBox Grid.Row="4" 
-                         Grid.Column="5" 
-                         Name="nZ"
-                         TextChanged="nZ_TextChanged"/>
-                <Button Name="SaveArea"
-                        Grid.Column="5"
-                        Grid.Row="6"
-                        Content="Сохранить"
-                        Click="SaveArea_Click"/>
-            </Grid>
-        </Expander>
 
         <GroupBox Header="Прямая задача" 
                   Grid.Column="1" 
@@ -124,14 +23,13 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.3*"/>
                     <RowDefinition Height="0.08*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Header="Задать область с аномалией"
+                <GroupBox Header="Задать параметры задачи"
                           Grid.Column="0">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -144,11 +42,12 @@
                             <ColumnDefinition Width="0.6*"/>
                             <ColumnDefinition Width="0.1*"/>
                             <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.1*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <RichTextBox x:Name="SetAnoms"
                         Grid.Column="0"
-                        Grid.ColumnSpan="5"
+                        Grid.ColumnSpan="6"
                         Grid.Row="0"/>
                         <Button 
                             Grid.Column="1"
@@ -160,101 +59,15 @@
                         Grid.Row="2"
                         Content="Загрузить"  
                         Click="Load_Click" />
+
+                        <Button Name="SolveDirect"
+                        Content="Решить прямую задачу"
+                        Grid.Column="5"
+                        Grid.Row="2"
+                        Click="SolveDirect_Click"/>
                     </Grid>
                 </GroupBox>
 
-                <Expander Header="Задать приемники"
-                          Grid.Row="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="0.15*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="0.15*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.8*"/>
-                            <ColumnDefinition Width="0.6*"/>
-                            <ColumnDefinition Width="0.8*"/>
-                            <ColumnDefinition Width="0.6*"/>
-                            <ColumnDefinition Width="0.9*"/>
-                            <ColumnDefinition Width="0.6*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0"
-                               Grid.Column="0"
-                               HorizontalAlignment="Center"
-                               Content="XminRec"/>
-                        <Label Grid.Row="2"
-                               Grid.Column="0"
-                               HorizontalAlignment="Center"
-                               Content="YminRec"/>
-                        <Label Grid.Row="4"
-                               Grid.Column="0"
-                               HorizontalAlignment="Center"
-                               Content="ZRec"/>
-                        <Label Grid.Row="0"
-                               Grid.Column="2"
-                               HorizontalAlignment="Center"
-                               Content="XmaxRec"/>
-                        <Label Grid.Row="2"
-                               Grid.Column="2"
-                               HorizontalAlignment="Center"
-                               Content="YmaxRec"/>
-                        <Label Grid.Row="0"
-                               Grid.Column="4"
-                               HorizontalAlignment="Center"
-                               Content="NProfiles"/>
-                        <Label Grid.Row="2"
-                               Grid.Column="4"
-                               HorizontalAlignment="Center"
-                               Content="NReceiver"/>
-                        <TextBox Grid.Row="0" 
-                                 Grid.Column="1" 
-                                 Name="xRecMin"
-                                 TextChanged="xRecMin_TextChanged"/>
-                        <TextBox Grid.Row="2" 
-                                 Grid.Column="1" 
-                                 Name="yRecMin"
-                                 TextChanged="yRecMin_TextChanged"/>
-                        <TextBox Grid.Row="4" 
-                                 Grid.Column="1" 
-                                 Name="zRec"
-                                 TextChanged="zRec_TextChanged"/>
-                        <TextBox Grid.Row="0" 
-                                 Grid.Column="3" 
-                                 Name="xRecMax"
-                                 TextChanged="xRecMax_TextChanged"/>
-                        <TextBox Grid.Row="2" 
-                                 Grid.Column="3" 
-                                 Name="yRecMax"
-                                 TextChanged="yRecMax_TextChanged"/>
-                        <TextBox Grid.Row="0" 
-                                 Grid.Column="5" 
-                                 Name="nPr"
-                                 TextChanged="nPr_TextChanged"/>
-                        <TextBox Grid.Row="2" 
-                                 Grid.Column="5" 
-                                 Name="nRec"
-                                 TextChanged="nRec_TextChanged"/>
-                        <Button  Name="SaveReceivers"
-                                 Content="Сохранить"
-                                 Grid.Column="4"
-                                 Grid.Row="4"
-                                 Click="SaveReceivers_Click"/>
-                    </Grid>
-                </Expander>
-
-                <Button Name="SolveDirect"
-                        Content="Решить прямую задачу"
-                        Grid.Row="2"
-                        HorizontalAlignment="Right"
-                        Click="SolveDirect_Click"/>
-                <Button Name="OpenArea"
-                        Grid.Row="2"
-                        HorizontalAlignment="Left"
-                        Content="Загрузить область"
-                        Click="OpenArea_Click"/>
             </Grid>
         </GroupBox>
 
@@ -275,11 +88,10 @@
                     <ColumnDefinition Width="0.1*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Name="openB"
-                            Grid.Column="0"
-                            Grid.Row="1"
-                            Content="Загрузить B"
-                            Click="openB_Click"/>
+                <Button Name="OpenArea"
+                        Grid.Row="2"
+                        Content="Загрузить область"
+                        Click="OpenArea_Click"/>
                 <Button Name="openMesh"
                                 Grid.Column="2"
                                 Grid.Row="1"
@@ -302,7 +114,7 @@
         <Canvas 
             Name ="cvs"
             Grid.Column="0" 
-            Grid.Row="1" 
+            Grid.Row="0" 
             Grid.RowSpan="1" 
             Width="350"
             Height="180"
