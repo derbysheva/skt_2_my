@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
 using Path = System.IO.Path;
+using System.Globalization;
 
 namespace skt_2_my
 {
@@ -39,7 +40,7 @@ namespace skt_2_my
         {
             //scaleX = 0; scaleY = 0;
             coorX = 0; coorY = 0;
-            Width = 496; Height = 350;
+            Width = 350; Height = 180;
         }
 
         protected Point TrasformMetresToPixels(Data3 tmp, int minX, int minY, int nX, int nY)
@@ -48,7 +49,7 @@ namespace skt_2_my
             Point newtmp = new Point();
 
             newtmp.X = coorX + Convert.ToInt32((tmp.xComp - minX) * Width / nX);
-            newtmp.Y = coorY + Height - Convert.ToInt32((tmp.yComp - minY) * Height / nY);
+            newtmp.Y = coorY + Height - Convert.ToInt32((tmp.zComp - minY) * Height / nY);
 
             return newtmp;
         }
@@ -63,29 +64,39 @@ namespace skt_2_my
         //    return newtmp;
         //}
 
-        public void DrawRec (ObservableCollection<Data3> data, Canvas chart, int xMin, int zMin, int nX, int nZ, Color col)
+        //public void DrawRec (ObservableCollection<Data3> data, Canvas chart, int xMin, int zMin, int nX, int nZ, Color col)
+        //{
+        //    System.Windows.Shapes.Path pth = new System.Windows.Shapes.Path();
+        //    pth.Stroke = new SolidColorBrush(col);
+        //    pth.StrokeThickness = 1;
+        //    StreamGeometry geo = new StreamGeometry();
+        //    geo.FillRule = FillRule.EvenOdd;
+        //    using (StreamGeometryContext ctx = geo.Open())
+        //    {
+        //        Point p1 = TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ);
+        //        Point p2 = TrasformMetresToPixels(data[1], xMin, zMin, nX, nZ);
+        //        Point p3 = TrasformMetresToPixels(data[2], xMin, zMin, nX, nZ);
+        //        Point p4 = TrasformMetresToPixels(data[3], xMin, zMin, nX, nZ);
+        //        ctx.BeginFigure(p1, true, false);
+        //        ctx.LineTo(p2, true, false);
+        //        ctx.LineTo(p3, true, false);
+        //        ctx.LineTo(p4, true, false);
+        //    }
+        //    geo.Freeze();
+        //    pth.Data = geo;
+        //    chart.Children.Add(pth);
+        //}
+        public void DrawRec(ObservableCollection<Data3> data, Canvas chart, int xMin, int zMin, int nX, int nZ, Color col)
         {
-            chart.Children.Clear();
-
-            System.Windows.Shapes.Path pth = new System.Windows.Shapes.Path();
-            pth.Stroke = new SolidColorBrush(col);
-            pth.StrokeThickness = 1;
-            StreamGeometry geo = new StreamGeometry();
-            geo.FillRule = FillRule.EvenOdd;
-            using (StreamGeometryContext ctx = geo.Open())
-            {
-                Point p1 = TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ);
-                Point p2 = TrasformMetresToPixels(data[1], xMin, zMin, nX, nZ);
-                Point p3 = TrasformMetresToPixels(data[2], xMin, zMin, nX, nZ);
-                Point p4 = TrasformMetresToPixels(data[3], xMin, zMin, nX, nZ);
-                ctx.BeginFigure(p1, true, false);
-                ctx.LineTo(p2, true, false);
-                ctx.LineTo(p3, true, false);
-                ctx.LineTo(p4, true, false);
-            }
-            geo.Freeze();
-            pth.Data = geo;
-            chart.Children.Add(pth);
+            Rectangle rect;
+            rect = new Rectangle();
+            rect.Stroke = new SolidColorBrush(col);
+            rect.Fill = new SolidColorBrush(col);
+            rect.Width = TrasformMetresToPixels(data[1],xMin, zMin, nX, nZ).X- TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ).X;
+            rect.Height = Math.Abs(TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ).Y - TrasformMetresToPixels(data[2], xMin, zMin, nX, nZ).Y);
+            Canvas.SetLeft(rect, TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ).X); 
+            Canvas.SetTop(rect, TrasformMetresToPixels(data[0], xMin, zMin, nX, nZ).Y);
+            chart.Children.Add(rect);
         }
 
         private int CheckInterval( Data3 val, ObservableCollection<Data3> values)
@@ -119,6 +130,7 @@ namespace skt_2_my
             if (val.xComp >= values[13].xComp && val.xComp < values[14].xComp) return 13;
             else
             if (val.xComp >= values[14].xComp && val.xComp <= values[15].xComp) return 14;
+            else return 14;
         }
 
         public void DrawAll(List<ObservableCollection<Data3>> meshData, ObservableCollection<Data3> Pdata, 
@@ -127,7 +139,7 @@ namespace skt_2_my
             int nX = Convert.ToInt32(xMax - xMin);
             int nZ = Convert.ToInt32(zMax - zMin);
             int xMin1 = Convert.ToInt32(xMin);
-            int zMin1 = Convert.ToInt32(xMin);
+            int zMin1 = Convert.ToInt32(zMin);
 
             double maxP = Pdata.Max(a => a.xComp);
             double minP = Pdata.Min(a => a.xComp);
@@ -141,7 +153,7 @@ namespace skt_2_my
                 cols.Add(Color.FromRgb(r, g, 255));
             }
             ObservableCollection<Data3> values = new ObservableCollection<Data3>();
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i <= 15; i++)
             {
                 var tmp = i * hP;
                 values.Add(new Data3(){
@@ -149,8 +161,9 @@ namespace skt_2_my
                     yComp = 0, 
                     zComp = 0});
             }
-            for(int i = 0; i< meshData.LongCount(); i++)
-            {
+            chart.Children.Clear();
+            for (int i = 0; i< meshData.LongCount(); i++)
+            { 
                 var indcol = CheckInterval(Pdata[i], values);
                 DrawRec(meshData[i], chart, xMin1, zMin1, nX, nZ, cols[indcol]);
             }
@@ -299,8 +312,10 @@ namespace skt_2_my
         double xrecmin, xrecmax, yrecmin, yrecmax, zrec;
         int npr, nrec;
         ObservableCollection<Data3> B, P;
-
         List<ObservableCollection<Data3>> _cellMesh = new List<ObservableCollection<Data3>>();
+
+        Draw drawobj = new Draw();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -324,7 +339,6 @@ namespace skt_2_my
 
         private void yRecMin_TextChanged(object sender, TextChangedEventArgs e) => yrecmin = Convert.ToDouble(yRecMin.Text);
         private void zRec_TextChanged(object sender, TextChangedEventArgs e) => zrec = Convert.ToDouble(zRec.Text);
-
         private void xRecMax_TextChanged(object sender, TextChangedEventArgs e) => xrecmax = Convert.ToDouble(xRecMax.Text);
 
         private void yRecMax_TextChanged(object sender, TextChangedEventArgs e) => yrecmax = Convert.ToDouble(yRecMax.Text);
@@ -350,30 +364,73 @@ namespace skt_2_my
         }
         private void openP_Click(object sender, RoutedEventArgs e)
         {
-            if (openFileDialog.ShowDialog() == true)
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == true)
             {
-                string filename = openFileDialog.FileName;
+                    string filename = ofd.FileName;
+                    string line;
+                    string shortFileName;
+                    StreamReader reader = File.OpenText(filename);
+                    ObservableCollection<Data3> source = new ObservableCollection<Data3>();
+                    //shortFileName = filename.Split('\\').Last();
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        //line.TrimEnd('\t');
+                    //if (line.Last() == char.Parse("")) line.Remove(line.IndexOf(""));
+                        string[] items = line.Split('\t');
+                    
+                    foreach (var i in items)
+                    {
+                        if (i.LongCount() != 0)
+                        {
+                            source.Add(new Data3()
+                            {
+                                xComp = double.Parse(i, CultureInfo.InvariantCulture),
+                                yComp = 0,
+                                zComp = 0
+                            });
+                        }
+                    }
+                    }
+                    reader.Close();
+                    P = source;
+            }
+        }
+
+        private void OpenArea_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == true)
+            {
+                string filename = ofd.FileName;
                 string line;
-                string shortFileName;
                 StreamReader reader = File.OpenText(filename);
                 ObservableCollection<Data3> source = new ObservableCollection<Data3>();
-                shortFileName = filename.Split('\\').Last();
-                while ((line = reader.ReadLine()) != null)
-                {
-                    string[] items = line.Split('\t');
-                    source.Add(new Data3()
-                    {
-                        xComp = double.Parse(items[0]),
-                        yComp = 0,
-                        zComp = 0
-                    });
-                }
+                string[] items;
+                line = reader.ReadLine();
+                items= line.Split(' ');
+                xmin = double.Parse( items[0], CultureInfo.InvariantCulture);
+                xmax = double.Parse(items[1], CultureInfo.InvariantCulture);
+                nx = int.Parse(items[2], CultureInfo.InvariantCulture);
+                line = reader.ReadLine();
+                items = line.Split(' ');
+                ymin = double.Parse(items[0], CultureInfo.InvariantCulture);
+                ymax = double.Parse(items[1], CultureInfo.InvariantCulture);
+                ny = int.Parse(items[2], CultureInfo.InvariantCulture);
+                line = reader.ReadLine();
+                items = line.Split(' ');
+                zmin = double.Parse(items[0], CultureInfo.InvariantCulture);
+                zmax = double.Parse(items[1], CultureInfo.InvariantCulture);
+                nz = int.Parse(items[2], CultureInfo.InvariantCulture);
                 reader.Close();
-                P = source;
             }
         }
 
 
+        private void DrawSolution_Click(object sender, RoutedEventArgs e)
+        {
+            drawobj.DrawAll(_cellMesh, P, xmin, zmin, xmax, zmax, cvs);
+        }
         private void SaveArea_Click(object sender, RoutedEventArgs e)
         {
             StreamWriter writer = new StreamWriter("area.txt");
@@ -393,9 +450,10 @@ namespace skt_2_my
 
         private void Open(object sender, RoutedEventArgs e)
         {
-            if (openFileDialog.ShowDialog() == true)
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == true)
             {
-                string filename = openFileDialog.FileName;
+                string filename = ofd.FileName;
                 string line;
                 string shortFileName;
                 StreamReader reader = File.OpenText(filename);
@@ -404,8 +462,8 @@ namespace skt_2_my
                 while ((line = reader.ReadLine()) != null)
                 {
                     string[] items = line.Split('\t');
-                    source.Add(new Data3() { xComp = double.Parse(items[0]),
-                        yComp=double.Parse(items[1]), zComp= double.Parse(items[2]) });
+                    source.Add(new Data3() { xComp = double.Parse(items[0], CultureInfo.InvariantCulture),
+                        yComp=double.Parse(items[1], CultureInfo.InvariantCulture), zComp= double.Parse(items[2], CultureInfo.InvariantCulture) });
                 }
                 reader.Close();
                 //_cellMesh.Add(source);
@@ -413,26 +471,35 @@ namespace skt_2_my
         }
         private void OpenMesh(object sender, RoutedEventArgs e)
         {
-            if (openFileDialog.ShowDialog() == true)
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == true)
             {
-                string filename = openFileDialog.FileName;
-                string line;
-                string shortFileName;
-                StreamReader reader = File.OpenText(filename);
-                ObservableCollection<Data3> source = new ObservableCollection<Data3>();
-                shortFileName = filename.Split('\\').Last();
-                while ((line = reader.ReadLine()) != null)
+                if (!String.IsNullOrEmpty(ofd.FileName))
                 {
-                    string[] items = line.Split('\t');
-                    source.Add(new Data3()
+                    string filename = ofd.FileName;
+                    string line;
+                    string shortFileName;
+                    StreamReader reader = File.OpenText(filename);
+                    
+                    shortFileName = filename.Split('\\').Last();
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        xComp = double.Parse(items[0]),
-                        yComp = 0,
-                        zComp = double.Parse(items[1])
-                    });
+                        ObservableCollection<Data3> source = new ObservableCollection<Data3>();
+                        string[] items = line.Split('\t');
+                        for (int i = 0; i < 8; i+=2)
+                        {
+                            source.Add(new Data3()
+                            {
+                                xComp = double.Parse(items[i], CultureInfo.InvariantCulture),
+                                yComp = 0,
+                                zComp = double.Parse(items[i+1], CultureInfo.InvariantCulture)
+                            });
+                        }
+                        _cellMesh.Add(source);
+                    }
+                    reader.Close();
+                    
                 }
-                reader.Close();
-                _cellMesh.Add(source);
             }
         }
 
